@@ -1,21 +1,21 @@
-import type { Lang } from "./languages";
+import type { Lang } from "@/i18n/languages";
 
 import hu from "@/messages/hu.json";
 import ro from "@/messages/ro.json";
 import en from "@/messages/en.json";
 
-export type Messages = typeof ro;
+/**
+ * Typed messages store (no `any`)
+ * Assumes all language JSON files share the same shape.
+ */
+export type Messages = typeof hu;
 
-const DICT: Record<Lang, Messages> = { hu, ro, en };
+export const MESSAGES = {
+  hu,
+  ro,
+  en,
+} as const satisfies Record<Lang, Messages>;
 
 export function getMessages(lang: Lang): Messages {
-  return DICT[lang];
-}
-
-// t(messages, "home.title")
-export function t(messages: Messages, key: string): string {
-  const parts = key.split(".");
-  let cur: any = messages;
-  for (const p of parts) cur = cur?.[p];
-  return typeof cur === "string" ? cur : key;
+  return MESSAGES[lang];
 }
