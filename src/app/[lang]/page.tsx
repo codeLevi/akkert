@@ -1,3 +1,4 @@
+// src/app/[lang]/page.tsx
 import Image from "next/image";
 import { isLang, DEFAULT_LANG, type Lang } from "@/i18n/languages";
 
@@ -5,15 +6,12 @@ import hu from "@/messages/hu.json";
 import ro from "@/messages/ro.json";
 import en from "@/messages/en.json";
 
-import Reveal from "@/components/Reveal";
 import Gallery from "@/components/Gallery";
 
 type MessagesShape = {
   motto: string;
   about: { title: string; text: string[] };
   gallery: { title: string };
-  // ✅ offer optional (was required somewhere before)
-  offer?: { title: string; items: string[] };
   contact: {
     title: string;
     phone: string;
@@ -24,151 +22,118 @@ type MessagesShape = {
     airbnb: string;
     maps: string;
   };
+  // ha a JSON-ban még benne van régi kulcs, nem baj
+  offer?: unknown;
 };
 
-const MESSAGES: Record<Lang, MessagesShape> = { hu, ro, en };
+const MESSAGES: Record<Lang, MessagesShape> = {
+  hu: hu as MessagesShape,
+  ro: ro as MessagesShape,
+  en: en as MessagesShape,
+};
 
-/**
- * Uses optimized images from: /public/gallery/web/
- * Files: 01.jpg ... 18.jpg
- */
-const GALLERY_IMAGES: { src: string; alt?: string }[] = [
-  { src: "/gallery/web/01.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/02.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/03.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/04.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/05.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/06.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/07.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/08.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/09.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/10.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/11.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/12.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/13.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/14.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/15.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/16.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/17.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/18.jpg", alt: "AKKERT" }
-];
+// 18 képed van most: /public/gallery/01.jpg ... /18.jpg
+const GALLERY_IMAGES = Array.from({ length: 18 }, (_, i) => {
+  const n = String(i + 1).padStart(2, "0");
+  return `/gallery/${n}.jpg`;
+});
 
 export default function Page({ params }: { params: { lang: string } }) {
   const lang: Lang = isLang(params.lang) ? params.lang : DEFAULT_LANG;
   const t = MESSAGES[lang];
 
-  const iconLinks = [
-    { href: t.contact.instagram, icon: "/icons/instagram.svg", label: "Instagram" },
-    { href: t.contact.facebook, icon: "/icons/facebook.svg", label: "Facebook" },
-    { href: t.contact.whatsapp, icon: "/icons/whatsapp.svg", label: "WhatsApp" },
-    { href: t.contact.airbnb, icon: "/icons/airbnb.svg", label: "Airbnb" },
-    { href: t.contact.maps, icon: "/icons/maps.svg", label: "Maps" }
-  ];
-
   return (
     <main className="w-full">
       {/* HERO */}
       <section id="top" className="relative h-[70vh] min-h-[520px] w-full">
-        <Image src="/hero.jpg" alt="AKKERT" fill priority className="object-cover" />
+        <Image
+          src="/hero.jpg"
+          alt="AKKERT"
+          fill
+          priority
+          className="object-cover"
+        />
+
+        {/* SIMPLE OVERLAY */}
         <div className="absolute inset-0 bg-black/40" />
 
-        <div className="relative z-10 mx-auto h-full max-w-5xl px-6 md:px-8">
-          <div className="absolute left-0 bottom-24 md:bottom-28 max-w-xl">
-            <Reveal delay={60} duration={800}>
-              <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-[#f3f2ee]/80">
-                AKKERT
-              </h1>
-            </Reveal>
+        {/* TEXT — left + lower + off-white + faded */}
+        <div className="relative z-10 mx-auto h-full max-w-6xl px-6 md:px-8">
+          <div className="absolute left-6 md:left-8 bottom-24 md:bottom-28 max-w-xl">
+            <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-[#f3f2ee]/80">
+              AKKERT
+            </h1>
 
-            <Reveal delay={140} duration={900}>
-              <p className="mt-4 text-lg md:text-xl text-[#e6e4dd]/70">{t.motto}</p>
-            </Reveal>
+            <p className="mt-4 text-lg md:text-xl text-[#e6e4dd]/70">
+              {t.motto}
+            </p>
           </div>
         </div>
       </section>
 
-      {/* CONTENT COLUMN */}
-      <div className="mx-auto max-w-5xl px-6 md:px-8">
-        {/* ABOUT */}
-        <section id="about" className="py-24 scroll-mt-32">
-          <Reveal>
-            <h2 className="text-2xl font-medium text-black/90">{t.about.title}</h2>
-          </Reveal>
+      {/* ABOUT */}
+      <section
+        id="about"
+        className="mx-auto max-w-5xl px-6 py-24 md:px-8 scroll-mt-32"
+      >
+        <h2 className="text-2xl font-medium text-black/90">{t.about.title}</h2>
 
-          <Reveal delay={80}>
-            <div className="mt-6 space-y-4 text-black/65">
-              {t.about.text.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-          </Reveal>
-        </section>
+        <div className="mt-6 space-y-4 text-black/65">
+          {t.about.text.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+        </div>
+      </section>
 
-        {/* (Optional) OFFER — only renders if present in JSON */}
-        {t.offer?.title ? (
-          <section id="offer" className="py-24 scroll-mt-32">
-            <Reveal>
-              <h2 className="text-2xl font-medium text-black/90">{t.offer.title}</h2>
-            </Reveal>
+      {/* GALLERY */}
+      <section
+        id="gallery"
+        className="mx-auto max-w-5xl px-6 py-24 md:px-8 scroll-mt-32"
+      >
+        <h2 className="text-2xl font-medium text-black/90">
+          {t.gallery.title}
+        </h2>
 
-            {Array.isArray(t.offer.items) && t.offer.items.length > 0 ? (
-              <Reveal delay={80}>
-                <ul className="mt-6 space-y-2 text-black/65 list-disc pl-5">
-                  {t.offer.items.map((it, idx) => (
-                    <li key={idx}>{it}</li>
-                  ))}
-                </ul>
-              </Reveal>
-            ) : null}
-          </section>
-        ) : null}
+        <div className="mt-8">
+          <Gallery images={GALLERY_IMAGES} />
+        </div>
+      </section>
 
-        {/* GALLERY */}
-        <section id="gallery" className="py-24 scroll-mt-32">
-          <Reveal>
-            <h2 className="text-2xl font-medium text-black/90">{t.gallery.title}</h2>
-          </Reveal>
+      {/* CONTACT */}
+      <section
+        id="contact"
+        className="mx-auto max-w-5xl px-6 py-24 md:px-8 scroll-mt-32"
+      >
+        <h2 className="text-2xl font-medium text-black/90">
+          {t.contact.title}
+        </h2>
 
-          <div className="mt-8">
-            <Gallery images={GALLERY_IMAGES} />
-          </div>
-        </section>
+        {/* telefon + cím (ikonokkal, ahogy volt) */}
+        <div className="mt-6 space-y-2 text-black/70">
+          <p>📞 {t.contact.phone}</p>
+          <p>📍 {t.contact.address}</p>
+        </div>
 
-        {/* CONTACT */}
-        <section id="contact" className="py-24 scroll-mt-32">
-          <Reveal>
-            <h2 className="text-2xl font-medium text-black/90">{t.contact.title}</h2>
-          </Reveal>
-
-          <Reveal delay={80}>
-            <div className="mt-6 space-y-2 text-black/70">
-              <p>📞 {t.contact.phone}</p>
-              <p>📍 {t.contact.address}</p>
-            </div>
-          </Reveal>
-        </section>
-
-        {/* ICONS */}
-        <section className="py-10">
-          <Reveal>
-            <div className="mx-auto flex max-w-md items-center justify-center gap-7">
-              {iconLinks.map((item, i) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={item.label}
-                  className="group opacity-60 transition-all duration-300 hover:opacity-100 hover:-translate-y-1"
-                  style={{ transitionDelay: `${i * 25}ms` }}
-                >
-                  <img src={item.icon} alt="" className="h-5 w-5" loading="lazy" />
-                </a>
-              ))}
-            </div>
-          </Reveal>
-        </section>
-      </div>
+        {/* ikon sor (alul, középen – ezt már a te layoutod/style-od kezeli,
+            itt csak a linkek vannak) */}
+        <div className="mt-6 flex flex-wrap items-center gap-6">
+          <a href={t.contact.instagram} target="_blank" rel="noreferrer">
+            Instagram
+          </a>
+          <a href={t.contact.facebook} target="_blank" rel="noreferrer">
+            Facebook
+          </a>
+          <a href={t.contact.whatsapp} target="_blank" rel="noreferrer">
+            WhatsApp
+          </a>
+          <a href={t.contact.airbnb} target="_blank" rel="noreferrer">
+            Airbnb
+          </a>
+          <a href={t.contact.maps} target="_blank" rel="noreferrer">
+            Maps
+          </a>
+        </div>
+      </section>
     </main>
   );
 }

@@ -13,16 +13,25 @@ const WELCOME: Record<Lang, string> = {
 const SEO: Record<Lang, { title: string; description: string }> = {
   ro: {
     title: "AKKERT – Casă de weekend în Cluj",
-    description: "Grădină liniștită în Cluj-Napoca. Rezervare pe Airbnb.",
+    description: "Oază verde în oraș. Locație pentru familie, evenimente și relaxare. Rezervare pe Airbnb.",
   },
   hu: {
-    title: "AKKERT – Zöld oázis Kolozsváron",
-    description: "Zöld menedék Kolozsvár szívében. Foglalás Airbnb-n.",
+    title: "AKKERT – Víkendház Kolozsváron",
+    description: "Zöld oázis a városban. Családi élmények, események, pihenés. Foglalás Airbnb-n.",
   },
   en: {
-    title: "AKKERT – Green oasis in Cluj",
-    description: "A calm green oasis in Cluj-Napoca. Book via Airbnb.",
+    title: "AKKERT – Weekend House in Cluj",
+    description: "Green oasis in the city. Family-friendly place for events and relaxing time. Book via Airbnb.",
   },
+};
+
+const NAV: Record<
+  Lang,
+  { home: string; about: string; gallery: string; contact: string }
+> = {
+  ro: { home: "Acasă", about: "Despre noi", gallery: "Galerie", contact: "Contact" },
+  hu: { home: "Kezdőlap", about: "Rólunk", gallery: "Galéria", contact: "Kapcsolat" },
+  en: { home: "Home", about: "About", gallery: "Gallery", contact: "Contact" },
 };
 
 export async function generateMetadata({
@@ -58,6 +67,23 @@ export async function generateMetadata({
   };
 }
 
+function NavLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      className="
+        text-[13px] md:text-[14px]
+        font-normal tracking-[0.06em]
+        uppercase text-black/60
+        hover:text-black/90
+        transition
+      "
+    >
+      {label}
+    </a>
+  );
+}
+
 export default function LangLayout({
   children,
   params,
@@ -66,48 +92,58 @@ export default function LangLayout({
   params: { lang: string };
 }) {
   const lang: Lang = isLang(params.lang) ? params.lang : DEFAULT_LANG;
-
-  const NAV: Record<Lang, { top: string; about: string; gallery: string; contact: string }> =
-    {
-      hu: { top: "Kezdőlap", about: "Rólunk", gallery: "Galéria", contact: "Kapcsolat" },
-      ro: { top: "Acasă", about: "Despre", gallery: "Galerie", contact: "Contact" },
-      en: { top: "Home", about: "About", gallery: "Gallery", contact: "Contact" },
-    };
+  const t = NAV[lang];
 
   return (
     <div className="min-h-screen flex flex-col">
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b bg-white/60 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 md:px-8">
-          <div className="relative flex h-14 items-center">
-            {/* LEFT */}
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              <span className="text-sm font-medium tracking-wide text-black/80">
+      <header
+        className="
+          sticky top-0 z-50 border-b
+          bg-white/70 backdrop-blur
+          transition-all duration-300
+          supports-[animation-timeline:scroll()]:animate-header-shrink
+        "
+      >
+        <div
+          className="
+            mx-auto grid w-full grid-cols-3 items-center
+            px-6 py-5 md:px-10
+            transition-all duration-300
+            supports-[animation-timeline:scroll()]:animate-header-inner
+          "
+        >
+          {/* LEFT */}
+          <div className="flex items-center gap-3">
+            <a href={`/${lang}#top`} className="flex items-center gap-3">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span className="text-[15px] font-normal tracking-[0.02em] text-black/85">
                 {WELCOME[lang]}
               </span>
-            </div>
+            </a>
+          </div>
 
-            {/* CENTER NAV (no Offer) */}
-            <nav className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-6 text-sm text-black/60">
-              <a href="#top" className="hover:text-black/85 transition">
-                {NAV[lang].top}
-              </a>
-              <a href="#about" className="hover:text-black/85 transition">
-                {NAV[lang].about}
-              </a>
-              <a href="#gallery" className="hover:text-black/85 transition">
-                {NAV[lang].gallery}
-              </a>
-              <a href="#contact" className="hover:text-black/85 transition">
-                {NAV[lang].contact}
-              </a>
-            </nav>
+          {/* CENTER NAV (desktop) */}
+          <nav className="hidden md:flex justify-center gap-8">
+            <NavLink href={`/${lang}#top`} label={t.home} />
+            <NavLink href={`/${lang}#about`} label={t.about} />
+            <NavLink href={`/${lang}#gallery`} label={t.gallery} />
+            <NavLink href={`/${lang}#contact`} label={t.contact} />
+          </nav>
 
-            {/* RIGHT */}
-            <div className="ml-auto">
-              <LanguageSwitcher currentLang={lang} />
-            </div>
+          {/* RIGHT */}
+          <div className="flex justify-end">
+            <LanguageSwitcher currentLang={lang} />
+          </div>
+        </div>
+
+        {/* MOBILE NAV */}
+        <div className="md:hidden border-t bg-white/40">
+          <div className="mx-auto flex justify-around px-4 py-2">
+            <NavLink href={`/${lang}#top`} label={t.home} />
+            <NavLink href={`/${lang}#about`} label={t.about} />
+            <NavLink href={`/${lang}#gallery`} label={t.gallery} />
+            <NavLink href={`/${lang}#contact`} label={t.contact} />
           </div>
         </div>
       </header>
@@ -117,7 +153,7 @@ export default function LangLayout({
 
       {/* FOOTER */}
       <footer className="border-t bg-white/60 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-4 md:px-8 py-3 text-center text-xs text-black/40">
+        <div className="mx-auto px-4 py-3 text-center text-xs text-black/40">
           © 2026 AKKERT
         </div>
       </footer>
