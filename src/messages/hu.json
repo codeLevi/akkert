@@ -3,9 +3,13 @@
   "about": {
     "title": "Rólunk",
     "text": [
-      "AKKERT egy zöld menedék Kolozsvár szívében.",
+      "Az AKKERT egy zöld menedék Kolozsvár szívében.",
       "Tökéletes választás születésnapokra, családi ünnepekre vagy egy pihentető napra a természetben."
     ]
+  },
+  "offer": {
+    "title": "Ajánlat",
+    "items": []
   },
   "gallery": {
     "title": "Galéria"

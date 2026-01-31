@@ -3,9 +3,13 @@
   "about": {
     "title": "About",
     "text": [
-      "AKKERT is a green retreat in the heart of Cluj.",
-      "Ideal for birthdays, family gatherings, and a relaxed day outdoors."
+      "AKKERT is a green oasis in the heart of Cluj.",
+      "Perfect for birthdays, family celebrations, or a relaxing day in nature."
     ]
+  },
+  "offer": {
+    "title": "Offer",
+    "items": []
   },
   "gallery": {
     "title": "Gallery"
