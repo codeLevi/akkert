@@ -22,7 +22,7 @@ type MessagesShape = {
     airbnb: string;
     maps: string;
   };
-  // ha a JSON-ban még benne van régi kulcs, nem baj
+  // ha a JSON-ban van még régi kulcs, nem baj
   offer?: unknown;
 };
 
@@ -32,11 +32,14 @@ const MESSAGES: Record<Lang, MessagesShape> = {
   en: en as MessagesShape,
 };
 
-// 18 képed van most: /public/gallery/01.jpg ... /18.jpg
-const GALLERY_IMAGES = Array.from({ length: 18 }, (_, i) => {
-  const n = String(i + 1).padStart(2, "0");
-  return `/gallery/${n}.jpg`;
-});
+// 18 kép: /public/gallery/01.jpg ... /18.jpg
+const GALLERY_IMAGES: { src: string; alt?: string }[] = Array.from(
+  { length: 18 },
+  (_, i) => {
+    const n = String(i + 1).padStart(2, "0");
+    return { src: `/gallery/${n}.jpg`, alt: `AKKERT ${n}` };
+  }
+);
 
 export default function Page({ params }: { params: { lang: string } }) {
   const lang: Lang = isLang(params.lang) ? params.lang : DEFAULT_LANG;
@@ -46,27 +49,15 @@ export default function Page({ params }: { params: { lang: string } }) {
     <main className="w-full">
       {/* HERO */}
       <section id="top" className="relative h-[70vh] min-h-[520px] w-full">
-        <Image
-          src="/hero.jpg"
-          alt="AKKERT"
-          fill
-          priority
-          className="object-cover"
-        />
-
-        {/* SIMPLE OVERLAY */}
+        <Image src="/hero.jpg" alt="AKKERT" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-black/40" />
 
-        {/* TEXT — left + lower + off-white + faded */}
         <div className="relative z-10 mx-auto h-full max-w-6xl px-6 md:px-8">
           <div className="absolute left-6 md:left-8 bottom-24 md:bottom-28 max-w-xl">
             <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-[#f3f2ee]/80">
               AKKERT
             </h1>
-
-            <p className="mt-4 text-lg md:text-xl text-[#e6e4dd]/70">
-              {t.motto}
-            </p>
+            <p className="mt-4 text-lg md:text-xl text-[#e6e4dd]/70">{t.motto}</p>
           </div>
         </div>
       </section>
@@ -90,9 +81,7 @@ export default function Page({ params }: { params: { lang: string } }) {
         id="gallery"
         className="mx-auto max-w-5xl px-6 py-24 md:px-8 scroll-mt-32"
       >
-        <h2 className="text-2xl font-medium text-black/90">
-          {t.gallery.title}
-        </h2>
+        <h2 className="text-2xl font-medium text-black/90">{t.gallery.title}</h2>
 
         <div className="mt-8">
           <Gallery images={GALLERY_IMAGES} />
@@ -104,18 +93,15 @@ export default function Page({ params }: { params: { lang: string } }) {
         id="contact"
         className="mx-auto max-w-5xl px-6 py-24 md:px-8 scroll-mt-32"
       >
-        <h2 className="text-2xl font-medium text-black/90">
-          {t.contact.title}
-        </h2>
+        <h2 className="text-2xl font-medium text-black/90">{t.contact.title}</h2>
 
-        {/* telefon + cím (ikonokkal, ahogy volt) */}
+        {/* telefonszám, cím, ikonok sorrend */}
         <div className="mt-6 space-y-2 text-black/70">
           <p>📞 {t.contact.phone}</p>
           <p>📍 {t.contact.address}</p>
         </div>
 
-        {/* ikon sor (alul, középen – ezt már a te layoutod/style-od kezeli,
-            itt csak a linkek vannak) */}
+        {/* itt csak a linkek vannak — az ikon megjelenítést a te Icon komponensed csinálja */}
         <div className="mt-6 flex flex-wrap items-center gap-6">
           <a href={t.contact.instagram} target="_blank" rel="noreferrer">
             Instagram
