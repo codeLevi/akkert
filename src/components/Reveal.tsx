@@ -1,91 +1,59 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-
-type RevealProps = {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;     // ms
-  duration?: number;  // ms
-};
-
-function prefersReducedMotion() {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export default function Reveal({
   children,
   className = "",
-  delay = 0,
-  duration = 700,
-}: RevealProps) {
+  once = true,
+}: {
+  children: ReactNode;
+  className?: string;
+  once?: boolean;
+}) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [inView, setInView] = useState(false);
-  const [tick, setTick] = useState(0);
+  const [shown, setShown] = useState(false);
 
-  // Basic in-view observer (once it enters, keep it "on")
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setInView(true);
+    // Reduced motion
+    const media = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    if (media?.matches) {
+      setShown(true);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry) return;
+        if (entry.isIntersecting) {
+          setShown(true);
+          if (once) io.disconnect();
+        } else if (!once) {
+          setShown(false);
+        }
       },
-      { threshold: 0.12 }
+      { root: null, threshold: 0.12, rootMargin: "0px 0px -10% 0px" }
     );
 
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  // Continuous subtle motion on scroll (very cheap)
-  useEffect(() => {
-    if (prefersReducedMotion()) return;
-
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => setTick((t) => (t + 1) % 100000));
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
-  // Calculate tiny offset based on element position (parallax micro)
-  let extraY = 0;
-  if (!prefersReducedMotion() && ref.current) {
-    const rect = ref.current.getBoundingClientRect();
-    const vh = typeof window !== "undefined" ? window.innerHeight : 900;
-    const center = rect.top + rect.height / 2;
-    const norm = (center - vh / 2) / (vh / 2); // -1..1 roughly
-    extraY = Math.max(-6, Math.min(6, norm * 6)); // clamp to subtle range
-  }
-
-  const style: React.CSSProperties = prefersReducedMotion()
-    ? {}
-    : {
-        transitionProperty: "opacity, transform",
-        transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
-        transitionDuration: `${duration}ms`,
-        transitionDelay: `${delay}ms`,
-        opacity: inView ? 1 : 0,
-        transform: inView
-          ? `translate3d(0, ${extraY}px, 0)`
-          : "translate3d(0, 14px, 0)",
-        willChange: "transform, opacity",
-      };
-
-  // use tick so it updates on scroll (even if inView already true)
-  void tick;
+    io.observe(el);
+    return () => io.disconnect();
+  }, [once]);
 
   return (
-    <div ref={ref} className={className} style={style}>
+    <div
+      ref={ref}
+      className={[
+        "transition-[opacity,transform,filter] duration-700 ease-out will-change-[opacity,transform]",
+        shown
+          ? "opacity-100 translate-y-0 blur-0"
+          : "opacity-0 translate-y-3 blur-[1px]",
+        className,
+      ].join(" ")}
+    >
       {children}
     </div>
   );
