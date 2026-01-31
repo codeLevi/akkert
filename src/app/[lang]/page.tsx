@@ -12,6 +12,8 @@ type MessagesShape = {
   motto: string;
   about: { title: string; text: string[] };
   gallery: { title: string };
+  // ✅ offer optional (was required somewhere before)
+  offer?: { title: string; items: string[] };
   contact: {
     title: string;
     phone: string;
@@ -48,7 +50,7 @@ const GALLERY_IMAGES: { src: string; alt?: string }[] = [
   { src: "/gallery/web/15.jpg", alt: "AKKERT" },
   { src: "/gallery/web/16.jpg", alt: "AKKERT" },
   { src: "/gallery/web/17.jpg", alt: "AKKERT" },
-  { src: "/gallery/web/18.jpg", alt: "AKKERT" },
+  { src: "/gallery/web/18.jpg", alt: "AKKERT" }
 ];
 
 export default function Page({ params }: { params: { lang: string } }) {
@@ -60,7 +62,7 @@ export default function Page({ params }: { params: { lang: string } }) {
     { href: t.contact.facebook, icon: "/icons/facebook.svg", label: "Facebook" },
     { href: t.contact.whatsapp, icon: "/icons/whatsapp.svg", label: "WhatsApp" },
     { href: t.contact.airbnb, icon: "/icons/airbnb.svg", label: "Airbnb" },
-    { href: t.contact.maps, icon: "/icons/maps.svg", label: "Maps" },
+    { href: t.contact.maps, icon: "/icons/maps.svg", label: "Maps" }
   ];
 
   return (
@@ -70,7 +72,6 @@ export default function Page({ params }: { params: { lang: string } }) {
         <Image src="/hero.jpg" alt="AKKERT" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-black/40" />
 
-        {/* Align hero text with section titles */}
         <div className="relative z-10 mx-auto h-full max-w-5xl px-6 md:px-8">
           <div className="absolute left-0 bottom-24 md:bottom-28 max-w-xl">
             <Reveal delay={60} duration={800}>
@@ -80,9 +81,7 @@ export default function Page({ params }: { params: { lang: string } }) {
             </Reveal>
 
             <Reveal delay={140} duration={900}>
-              <p className="mt-4 text-lg md:text-xl text-[#e6e4dd]/70">
-                {t.motto}
-              </p>
+              <p className="mt-4 text-lg md:text-xl text-[#e6e4dd]/70">{t.motto}</p>
             </Reveal>
           </div>
         </div>
@@ -104,6 +103,25 @@ export default function Page({ params }: { params: { lang: string } }) {
             </div>
           </Reveal>
         </section>
+
+        {/* (Optional) OFFER — only renders if present in JSON */}
+        {t.offer?.title ? (
+          <section id="offer" className="py-24 scroll-mt-32">
+            <Reveal>
+              <h2 className="text-2xl font-medium text-black/90">{t.offer.title}</h2>
+            </Reveal>
+
+            {Array.isArray(t.offer.items) && t.offer.items.length > 0 ? (
+              <Reveal delay={80}>
+                <ul className="mt-6 space-y-2 text-black/65 list-disc pl-5">
+                  {t.offer.items.map((it, idx) => (
+                    <li key={idx}>{it}</li>
+                  ))}
+                </ul>
+              </Reveal>
+            ) : null}
+          </section>
+        ) : null}
 
         {/* GALLERY */}
         <section id="gallery" className="py-24 scroll-mt-32">
@@ -130,7 +148,7 @@ export default function Page({ params }: { params: { lang: string } }) {
           </Reveal>
         </section>
 
-        {/* ICONS (above footer, centered) */}
+        {/* ICONS */}
         <section className="py-10">
           <Reveal>
             <div className="mx-auto flex max-w-md items-center justify-center gap-7">
