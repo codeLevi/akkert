@@ -31,17 +31,21 @@ export default function Gallery({ images }: GalleryProps) {
   const next = () => setIndex((i) => clampIndex(i + 1, images.length));
   const prev = () => setIndex((i) => clampIndex(i - 1, images.length));
 
+  // Keyboard controls
   useEffect(() => {
     if (!open) return;
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
       if (e.key === "ArrowRight") next();
       if (e.key === "ArrowLeft") prev();
     };
+
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open, images.length]);
 
+  // Scroll lock
   useEffect(() => {
     if (!open) return;
     const prevOverflow = document.body.style.overflow;
@@ -62,14 +66,18 @@ export default function Gallery({ images }: GalleryProps) {
   const lightbox =
     open && current ? (
       <div className="fixed inset-0 z-[9999]" role="dialog" aria-modal="true">
+        {/* BACKDROP */}
         <div className="absolute inset-0 bg-black/85" onPointerDown={close} />
 
+        {/* UI LAYER */}
         <div className="absolute inset-0 pointer-events-none">
+          {/* TOP BAR */}
           <div className="pointer-events-auto absolute top-0 left-0 right-0 flex items-center justify-between px-4 py-3">
             <div className="text-xs text-white/70">
               {current.i + 1} / {images.length}
             </div>
             <button
+              type="button"
               onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => {
                 e.stopPropagation();
@@ -81,6 +89,7 @@ export default function Gallery({ images }: GalleryProps) {
             </button>
           </div>
 
+          {/* IMAGE CENTER */}
           <div className="absolute inset-0 flex items-center justify-center p-6 md:p-10">
             <div
               className="pointer-events-auto"
@@ -95,23 +104,46 @@ export default function Gallery({ images }: GalleryProps) {
             </div>
           </div>
 
+          {/* ARROWS (fixed position) */}
           <button
+            type="button"
             onPointerDown={(e) => {
               e.stopPropagation();
               prev();
             }}
-            className="pointer-events-auto fixed left-4 md:left-8 top-1/2 -translate-y-1/2 border border-white/30 bg-white/10 px-3 py-2 text-white/85 hover:bg-white/20 transition"
+            className="
+              pointer-events-auto
+              fixed left-4 md:left-8
+              top-1/2 -translate-y-1/2
+              border border-white/30
+              bg-white/10
+              px-3 py-2
+              text-white/85
+              hover:bg-white/20
+              transition
+            "
             aria-label="Previous image"
           >
             ←
           </button>
 
           <button
+            type="button"
             onPointerDown={(e) => {
               e.stopPropagation();
               next();
             }}
-            className="pointer-events-auto fixed right-4 md:right-8 top-1/2 -translate-y-1/2 border border-white/30 bg-white/10 px-3 py-2 text-white/85 hover:bg-white/20 transition"
+            className="
+              pointer-events-auto
+              fixed right-4 md:right-8
+              top-1/2 -translate-y-1/2
+              border border-white/30
+              bg-white/10
+              px-3 py-2
+              text-white/85
+              hover:bg-white/20
+              transition
+            "
             aria-label="Next image"
           >
             →
@@ -122,10 +154,12 @@ export default function Gallery({ images }: GalleryProps) {
 
   return (
     <>
+      {/* GRID */}
       <div className="grid gap-3 grid-cols-2 md:grid-cols-3 auto-rows-[170px] md:auto-rows-[240px]">
         {images.map((img, i) => (
           <button
             key={img.src}
+            type="button"
             onClick={() => {
               setIndex(i);
               setOpen(true);
@@ -138,7 +172,7 @@ export default function Gallery({ images }: GalleryProps) {
               alt={img.alt ?? ""}
               loading="lazy"
               decoding="async"
-              fetchpriority="low"
+              fetchPriority="low"
               className="
                 h-full w-full object-cover
                 transition-transform duration-500 ease-out
@@ -147,18 +181,15 @@ export default function Gallery({ images }: GalleryProps) {
               "
             />
 
-            {/* exposure control */}
+            {/* cinematic overlays (lightweight) */}
             <div className="absolute inset-0 bg-black/20" />
-
-            {/* vignette / cinematic bottom */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-transparent opacity-80" />
-
-            {/* subtle highlight on hover */}
             <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-white/[0.03]" />
           </button>
         ))}
       </div>
 
+      {/* PORTAL */}
       {mounted && lightbox ? createPortal(lightbox, document.body) : null}
     </>
   );
