@@ -1,0 +1,23 @@
+{
+  "motto": "Green oasis in the city",
+  "about": {
+    "title": "About",
+    "text": [
+      "AKKERT is a green retreat in the heart of Cluj.",
+      "Ideal for birthdays, family gatherings, and a relaxed day outdoors."
+    ]
+  },
+  "gallery": {
+    "title": "Gallery"
+  },
+  "contact": {
+    "title": "Contact & location",
+    "phone": "+40 724 508 266",
+    "address": "Cluj-Napoca, Uliului St. 25",
+    "whatsapp": "https://wa.me/40724508266",
+    "instagram": "https://www.instagram.com/akkertben/",
+    "facebook": "https://www.facebook.com/akkert25",
+    "airbnb": "https://www.airbnb.com/rooms/1489020466031401643?locale=ro",
+    "maps": "https://maps.app.goo.gl/BtVnYwvswRmLTVsb6"
+  }
+}

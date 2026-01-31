@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth anchor scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* RESET: no rounded media */
+img,
+video,
+iframe {
+  border-radius: 0 !important;
+}
+
+/* === HERO effects === */
+
+/* 1) gradient overlay ONLY behind the text block (not full hero) */
+.hero-text-gradient {
+  background: radial-gradient(
+      70% 70% at 30% 55%,
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0) 70%
+    ),
+    linear-gradient(to top, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0));
+  opacity: 0.85;
+}
+
+/* 2) 1–2% grain (film look) */
+.film-grain {
+  position: relative;
+}
+
+.film-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.018; /* ~1.8% */
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* Header shrink */
+@supports (animation-timeline: scroll()) {
+  @keyframes header-shrink {
+    from {
+      backdrop-filter: blur(6px);
+    }
+    to {
+      backdrop-filter: blur(10px);
+    }
+  }
+
+  @keyframes header-inner {
+    from {
+      padding-top: 1.25rem;
+      padding-bottom: 1.25rem;
+    }
+    to {
+      padding-top: 0.6rem;
+      padding-bottom: 0.6rem;
+    }
+  }
+
+  header {
+    animation: header-shrink linear both;
+    animation-timeline: scroll();
+    animation-range: 0 200px;
+  }
+
+  header > div {
+    animation: header-inner linear both;
+    animation-timeline: scroll();
+    animation-range: 0 200px;
+  }
+}

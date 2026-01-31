@@ -1,0 +1,23 @@
+{
+  "motto": "Zöld oázis a városban",
+  "about": {
+    "title": "Rólunk",
+    "text": [
+      "AKKERT egy zöld menedék Kolozsvár szívében.",
+      "Tökéletes választás születésnapokra, családi ünnepekre vagy egy pihentető napra a természetben."
+    ]
+  },
+  "gallery": {
+    "title": "Galéria"
+  },
+  "contact": {
+    "title": "Kapcsolat és helyszín",
+    "phone": "+40 724 508 266",
+    "address": "Kolozsvár, Kányafő út 25 (Uliului)",
+    "whatsapp": "https://wa.me/40724508266",
+    "instagram": "https://www.instagram.com/akkertben/",
+    "facebook": "https://www.facebook.com/akkert25",
+    "airbnb": "https://www.airbnb.com/rooms/1489020466031401643?locale=ro",
+    "maps": "https://maps.app.goo.gl/BtVnYwvswRmLTVsb6"
+  }
+}
