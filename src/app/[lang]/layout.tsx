@@ -64,14 +64,7 @@ export default function LangLayout({
   return (
     <div className="min-h-screen flex flex-col">
       <Header lang={lang} />
-
       <main className="flex-1">{children}</main>
-
-      <footer className="border-t bg-white/92">
-        <div className="mx-auto max-w-6xl px-4 md:px-8 py-3 text-center text-xs text-black/40">
-          © 2026 AKKERT
-        </div>
-      </footer>
     </div>
   );
 }

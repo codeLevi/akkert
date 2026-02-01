@@ -10,11 +10,31 @@ const WELCOME: Record<Lang, string> = {
   en: "Welcome!",
 };
 
-const NAV: Record<Lang, { top: string; about: string; gallery: string; contact: string }> = {
+const NAV: Record<
+  Lang,
+  { top: string; about: string; gallery: string; contact: string }
+> = {
   hu: { top: "Kezdőlap", about: "Rólunk", gallery: "Galéria", contact: "Kapcsolat" },
   ro: { top: "Acasă", about: "Despre", gallery: "Galerie", contact: "Contact" },
   en: { top: "Home", about: "About", gallery: "Gallery", contact: "Contact" },
 };
+
+function NavLink({ href, children }: { href: string; children: string }) {
+  return (
+    <a
+      href={href}
+      className="
+        relative text-xs uppercase tracking-[0.18em] leading-none
+        text-black/45 hover:text-black/80 transition
+        after:absolute after:left-0 after:-bottom-2 after:h-px after:w-full
+        after:bg-black/30 after:scale-x-0 after:origin-left
+        hover:after:scale-x-100 after:transition-transform
+      "
+    >
+      {children}
+    </a>
+  );
+}
 
 export default function Header({ lang }: { lang: Lang }) {
   const [scrolled, setScrolled] = useState(false);
@@ -26,8 +46,7 @@ export default function Header({ lang }: { lang: Lang }) {
       ticking.current = true;
 
       requestAnimationFrame(() => {
-        const y = window.scrollY || 0;
-        setScrolled(y > 8);
+        setScrolled((window.scrollY || 0) > 8);
         ticking.current = false;
       });
     };
@@ -39,14 +58,15 @@ export default function Header({ lang }: { lang: Lang }) {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/92">
-      <div className="mx-auto max-w-6xl px-4 md:px-8">
-        <div
-          className={[
-            "relative flex items-center transition-all duration-300",
-            scrolled ? "h-12" : "h-14",
-          ].join(" ")}
-        >
+    <header
+      className={[
+        "sticky top-0 z-50 border-b bg-white/70 backdrop-blur",
+        scrolled ? "shadow-[0_10px_30px_rgba(0,0,0,0.08)]" : "shadow-none",
+      ].join(" ")}
+    >
+      <div className="mx-auto max-w-7xl px-4 md:px-8">
+        {/* FIX magasság -> nincs layout shift, nincs hero remegés */}
+        <div className="h-12 flex items-center">
           {/* LEFT */}
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
@@ -55,20 +75,12 @@ export default function Header({ lang }: { lang: Lang }) {
             </span>
           </div>
 
-          {/* CENTER NAV (egy tengelyen) */}
-          <nav className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-8 text-sm text-black/55 leading-none">
-            <a href="#top" className="hover:text-black/85 transition">
-              {NAV[lang].top}
-            </a>
-            <a href="#about" className="hover:text-black/85 transition">
-              {NAV[lang].about}
-            </a>
-            <a href="#gallery" className="hover:text-black/85 transition">
-              {NAV[lang].gallery}
-            </a>
-            <a href="#contact" className="hover:text-black/85 transition">
-              {NAV[lang].contact}
-            </a>
+          {/* CENTER NAV */}
+          <nav className="mx-auto hidden md:flex items-center gap-10">
+            <NavLink href="#top">{NAV[lang].top}</NavLink>
+            <NavLink href="#about">{NAV[lang].about}</NavLink>
+            <NavLink href="#gallery">{NAV[lang].gallery}</NavLink>
+            <NavLink href="#contact">{NAV[lang].contact}</NavLink>
           </nav>
 
           {/* RIGHT */}
