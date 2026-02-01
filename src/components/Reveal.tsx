@@ -18,7 +18,6 @@ export default function Reveal({
     const el = ref.current;
     if (!el) return;
 
-    // Reduced motion
     const media = window.matchMedia?.("(prefers-reduced-motion: reduce)");
     if (media?.matches) {
       setShown(true);
@@ -29,6 +28,7 @@ export default function Reveal({
       (entries) => {
         const entry = entries[0];
         if (!entry) return;
+
         if (entry.isIntersecting) {
           setShown(true);
           if (once) io.disconnect();
@@ -36,7 +36,7 @@ export default function Reveal({
           setShown(false);
         }
       },
-      { root: null, threshold: 0.12, rootMargin: "0px 0px -10% 0px" }
+      { threshold: 0.12, rootMargin: "0px 0px -10% 0px" }
     );
 
     io.observe(el);

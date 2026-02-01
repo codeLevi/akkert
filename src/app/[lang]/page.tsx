@@ -23,11 +23,13 @@ type MessagesShape = {
     airbnb: string;
     maps: string;
   };
+  // ha a JSON-ban ott maradt, nem baj
+  offer?: unknown;
 };
 
 const MESSAGES: Record<Lang, MessagesShape> = { hu, ro, en };
 
-// 18 kép (01.jpg ... 18.jpg) a /public/gallery/ mappában
+// 18 kép: /public/gallery/01.jpg ... /18.jpg
 const GALLERY_IMAGES: { src: string; alt?: string }[] = Array.from(
   { length: 18 },
   (_, i) => {
@@ -49,20 +51,21 @@ export default function Page({ params }: { params: { lang: string } }) {
           alt="AKKERT"
           fill
           priority
-          className="object-cover"
           sizes="100vw"
+          className="object-cover"
         />
-
         <div className="absolute inset-0 bg-black/40" />
 
         <div className="relative z-10 mx-auto h-full max-w-6xl px-6 md:px-8">
           <div className="absolute left-6 md:left-8 bottom-24 md:bottom-28 max-w-xl">
-            <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-[#f3f2ee]/80">
-              AKKERT
-            </h1>
-            <p className="mt-4 text-lg md:text-xl text-[#e6e4dd]/70">
-              {t.motto}
-            </p>
+            <Reveal>
+              <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-[#f3f2ee]/80">
+                AKKERT
+              </h1>
+              <p className="mt-4 text-lg md:text-xl text-[#e6e4dd]/70">
+                {t.motto}
+              </p>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -71,7 +74,7 @@ export default function Page({ params }: { params: { lang: string } }) {
       <section
         id="about"
         className="mx-auto max-w-5xl px-6 py-24 md:px-8 scroll-mt-32
-                   [content-visibility:auto] [contain-intrinsic-size:1px_700px]"
+                   [content-visibility:auto] [contain-intrinsic-size:1px_720px]"
       >
         <Reveal>
           <h2 className="text-2xl font-medium text-black/90">{t.about.title}</h2>
@@ -88,7 +91,7 @@ export default function Page({ params }: { params: { lang: string } }) {
       <section
         id="gallery"
         className="mx-auto max-w-6xl px-6 py-24 md:px-8 scroll-mt-32
-                   [content-visibility:auto] [contain-intrinsic-size:1px_900px]"
+                   [content-visibility:auto] [contain-intrinsic-size:1px_980px]"
       >
         <Reveal>
           <h2 className="text-2xl font-medium text-black/90">
@@ -105,7 +108,7 @@ export default function Page({ params }: { params: { lang: string } }) {
       <section
         id="contact"
         className="mx-auto max-w-5xl px-6 py-24 md:px-8 scroll-mt-32
-                   [content-visibility:auto] [contain-intrinsic-size:1px_650px]"
+                   [content-visibility:auto] [contain-intrinsic-size:1px_640px]"
       >
         <Reveal>
           <h2 className="text-2xl font-medium text-black/90">
@@ -118,9 +121,19 @@ export default function Page({ params }: { params: { lang: string } }) {
             <p>📍 {t.contact.address}</p>
           </div>
 
-          {/* ikonok: közelebb, halványabb, kattintható */}
+          {/* ikonok: alul középen (csak amik léteznek az Icon.tsx-ben) */}
           <div className="mt-4 flex justify-center">
             <div className="flex items-center gap-8 text-black/70">
+              <a
+                href={t.contact.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="WhatsApp"
+                className="opacity-55 hover:opacity-90 transition-opacity"
+              >
+                <Icon name="whatsapp" className="h-5 w-5" />
+              </a>
+
               <a
                 href={t.contact.instagram}
                 target="_blank"
@@ -128,7 +141,7 @@ export default function Page({ params }: { params: { lang: string } }) {
                 aria-label="Instagram"
                 className="opacity-55 hover:opacity-90 transition-opacity"
               >
-                <Icon name="instagram" size={20} />
+                <Icon name="instagram" className="h-5 w-5" />
               </a>
 
               <a
@@ -138,17 +151,7 @@ export default function Page({ params }: { params: { lang: string } }) {
                 aria-label="Facebook"
                 className="opacity-55 hover:opacity-90 transition-opacity"
               >
-                <Icon name="facebook" size={20} />
-              </a>
-
-              <a
-                href={t.contact.whatsapp}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="WhatsApp"
-                className="opacity-55 hover:opacity-90 transition-opacity"
-              >
-                <Icon name="whatsapp" size={20} />
+                <Icon name="facebook" className="h-5 w-5" />
               </a>
 
               <a
@@ -158,17 +161,17 @@ export default function Page({ params }: { params: { lang: string } }) {
                 aria-label="Airbnb"
                 className="opacity-55 hover:opacity-90 transition-opacity"
               >
-                <Icon name="airbnb" size={20} />
+                <Icon name="airbnb" className="h-5 w-5" />
               </a>
 
+              {/* Maps: nincs ikon, ezért szöveges link – de ott van */}
               <a
                 href={t.contact.maps}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Maps"
-                className="opacity-55 hover:opacity-90 transition-opacity"
+                className="text-xs tracking-wide opacity-60 hover:opacity-95 transition-opacity"
               >
-                <Icon name="maps" size={20} />
+                MAPS
               </a>
             </div>
           </div>
