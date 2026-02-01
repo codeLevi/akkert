@@ -27,7 +27,7 @@ type MessagesShape = {
 
 const MESSAGES: Record<Lang, MessagesShape> = { hu, ro, en };
 
-// 🔧 18 kép (01.jpg ... 18.jpg) a /public/gallery/ mappában
+// 18 kép (01.jpg ... 18.jpg) a /public/gallery/ mappában
 const GALLERY_IMAGES: { src: string; alt?: string }[] = Array.from(
   { length: 18 },
   (_, i) => {
@@ -53,10 +53,8 @@ export default function Page({ params }: { params: { lang: string } }) {
           sizes="100vw"
         />
 
-        {/* overlay */}
         <div className="absolute inset-0 bg-black/40" />
 
-        {/* text */}
         <div className="relative z-10 mx-auto h-full max-w-6xl px-6 md:px-8">
           <div className="absolute left-6 md:left-8 bottom-24 md:bottom-28 max-w-xl">
             <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-[#f3f2ee]/80">
@@ -114,39 +112,23 @@ export default function Page({ params }: { params: { lang: string } }) {
             {t.contact.title}
           </h2>
 
-          {/* phone + address (ikonok maradjanak előlük) */}
-          <div className="mt-6 space-y-3 text-black/70">
-            <div className="flex items-center gap-3">
-              <span className="opacity-70">
-                <Icon name="phone" size={18} />
-              </span>
-              <a
-                href={`tel:${t.contact.phone.replace(/\s+/g, "")}`}
-                className="hover:text-black/90 transition-colors"
-              >
-                {t.contact.phone}
-              </a>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span className="opacity-70">
-                <Icon name="pin" size={18} />
-              </span>
-              <span>{t.contact.address}</span>
-            </div>
+          {/* sorrend: telefon, cím, ikonok */}
+          <div className="mt-6 space-y-2 text-black/70">
+            <p>📞 {t.contact.phone}</p>
+            <p>📍 {t.contact.address}</p>
           </div>
 
-          {/* bottom icons row */}
-          <div className="mt-10 flex justify-center">
+          {/* ikonok közelebb, mintha új sor lenne */}
+          <div className="mt-4 flex justify-center">
             <div className="flex items-center gap-8 text-black/70">
               <a
                 href={t.contact.instagram}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram"
-                className="opacity-70 hover:opacity-95 transition-opacity"
+                className="opacity-65 hover:opacity-95 transition-opacity"
               >
-                <Icon name="instagram" size={22} />
+                <Icon name="instagram" size={20} />
               </a>
 
               <a
@@ -154,9 +136,9 @@ export default function Page({ params }: { params: { lang: string } }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Facebook"
-                className="opacity-70 hover:opacity-95 transition-opacity"
+                className="opacity-65 hover:opacity-95 transition-opacity"
               >
-                <Icon name="facebook" size={22} />
+                <Icon name="facebook" size={20} />
               </a>
 
               <a
@@ -164,9 +146,9 @@ export default function Page({ params }: { params: { lang: string } }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="WhatsApp"
-                className="opacity-70 hover:opacity-95 transition-opacity"
+                className="opacity-65 hover:opacity-95 transition-opacity"
               >
-                <Icon name="whatsapp" size={22} />
+                <Icon name="whatsapp" size={20} />
               </a>
 
               <a
@@ -174,9 +156,9 @@ export default function Page({ params }: { params: { lang: string } }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Airbnb"
-                className="opacity-70 hover:opacity-95 transition-opacity"
+                className="opacity-65 hover:opacity-95 transition-opacity"
               >
-                <Icon name="airbnb" size={22} />
+                <Icon name="airbnb" size={20} />
               </a>
 
               <a
@@ -184,9 +166,9 @@ export default function Page({ params }: { params: { lang: string } }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Maps"
-                className="opacity-70 hover:opacity-95 transition-opacity"
+                className="opacity-65 hover:opacity-95 transition-opacity"
               >
-                <Icon name="maps" size={22} />
+                <Icon name="maps" size={20} />
               </a>
             </div>
           </div>
