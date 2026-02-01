@@ -112,13 +112,13 @@ export default function Page({ params }: { params: { lang: string } }) {
             {t.contact.title}
           </h2>
 
-          {/* sorrend: telefon, cím, ikonok */}
+          {/* sorrend: telefonszám, cím, ikonok */}
           <div className="mt-6 space-y-2 text-black/70">
             <p>📞 {t.contact.phone}</p>
             <p>📍 {t.contact.address}</p>
           </div>
 
-          {/* ikonok közelebb, mintha új sor lenne */}
+          {/* ikonok: közelebb, halványabb, kattintható */}
           <div className="mt-4 flex justify-center">
             <div className="flex items-center gap-8 text-black/70">
               <a
@@ -126,7 +126,7 @@ export default function Page({ params }: { params: { lang: string } }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram"
-                className="opacity-65 hover:opacity-95 transition-opacity"
+                className="opacity-55 hover:opacity-90 transition-opacity"
               >
                 <Icon name="instagram" size={20} />
               </a>
@@ -136,7 +136,7 @@ export default function Page({ params }: { params: { lang: string } }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Facebook"
-                className="opacity-65 hover:opacity-95 transition-opacity"
+                className="opacity-55 hover:opacity-90 transition-opacity"
               >
                 <Icon name="facebook" size={20} />
               </a>
@@ -146,7 +146,7 @@ export default function Page({ params }: { params: { lang: string } }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="WhatsApp"
-                className="opacity-65 hover:opacity-95 transition-opacity"
+                className="opacity-55 hover:opacity-90 transition-opacity"
               >
                 <Icon name="whatsapp" size={20} />
               </a>
@@ -156,7 +156,7 @@ export default function Page({ params }: { params: { lang: string } }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Airbnb"
-                className="opacity-65 hover:opacity-95 transition-opacity"
+                className="opacity-55 hover:opacity-90 transition-opacity"
               >
                 <Icon name="airbnb" size={20} />
               </a>
@@ -166,7 +166,7 @@ export default function Page({ params }: { params: { lang: string } }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Maps"
-                className="opacity-65 hover:opacity-95 transition-opacity"
+                className="opacity-55 hover:opacity-90 transition-opacity"
               >
                 <Icon name="maps" size={20} />
               </a>
