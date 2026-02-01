@@ -6,8 +6,7 @@ import ro from "@/messages/ro.json";
 import en from "@/messages/en.json";
 
 import Gallery from "@/components/Gallery";
-import Icon from "@/components/Icon";
-import Reveal from "@/components/Reveal";
+import SocialIcons from "@/components/SocialIcons";
 
 type MessagesShape = {
   motto: string;
@@ -23,8 +22,6 @@ type MessagesShape = {
     airbnb: string;
     maps: string;
   };
-  // ha a JSON-ban ott maradt, nem baj
-  offer?: unknown;
 };
 
 const MESSAGES: Record<Lang, MessagesShape> = { hu, ro, en };
@@ -42,30 +39,29 @@ export default function Page({ params }: { params: { lang: string } }) {
   const lang: Lang = isLang(params.lang) ? params.lang : DEFAULT_LANG;
   const t = MESSAGES[lang];
 
+  const socialItems = [
+    { href: t.contact.whatsapp, src: "/icons/whatsapp.svg", label: "WhatsApp" },
+    { href: t.contact.instagram, src: "/icons/instagram.svg", label: "Instagram" },
+    { href: t.contact.facebook, src: "/icons/facebook.svg", label: "Facebook" },
+    { href: t.contact.airbnb, src: "/icons/airbnb.svg", label: "Airbnb" },
+    { href: t.contact.maps, src: "/icons/maps.svg", label: "Maps" },
+  ];
+
   return (
     <main className="w-full">
       {/* HERO */}
       <section id="top" className="relative h-[70vh] min-h-[520px] w-full">
-        <Image
-          src="/hero.jpg"
-          alt="AKKERT"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+        <Image src="/hero.jpg" alt="AKKERT" fill priority className="object-cover" sizes="100vw" />
         <div className="absolute inset-0 bg-black/40" />
 
         <div className="relative z-10 mx-auto h-full max-w-6xl px-6 md:px-8">
           <div className="absolute left-6 md:left-8 bottom-24 md:bottom-28 max-w-xl">
-            <Reveal>
-              <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-[#f3f2ee]/80">
-                AKKERT
-              </h1>
-              <p className="mt-4 text-lg md:text-xl text-[#e6e4dd]/70">
-                {t.motto}
-              </p>
-            </Reveal>
+            <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-[#f3f2ee]/80">
+              AKKERT
+            </h1>
+            <p className="mt-4 text-lg md:text-xl text-[#e6e4dd]/70">
+              {t.motto}
+            </p>
           </div>
         </div>
       </section>
@@ -76,15 +72,12 @@ export default function Page({ params }: { params: { lang: string } }) {
         className="mx-auto max-w-5xl px-6 py-24 md:px-8 scroll-mt-32
                    [content-visibility:auto] [contain-intrinsic-size:1px_720px]"
       >
-        <Reveal>
-          <h2 className="text-2xl font-medium text-black/90">{t.about.title}</h2>
-
-          <div className="mt-6 space-y-4 text-black/65">
-            {t.about.text.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
-        </Reveal>
+        <h2 className="text-2xl font-medium text-black/90">{t.about.title}</h2>
+        <div className="mt-6 space-y-4 text-black/65">
+          {t.about.text.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+        </div>
       </section>
 
       {/* GALLERY */}
@@ -93,89 +86,30 @@ export default function Page({ params }: { params: { lang: string } }) {
         className="mx-auto max-w-6xl px-6 py-24 md:px-8 scroll-mt-32
                    [content-visibility:auto] [contain-intrinsic-size:1px_980px]"
       >
-        <Reveal>
-          <h2 className="text-2xl font-medium text-black/90">
-            {t.gallery.title}
-          </h2>
-
-          <div className="mt-8">
-            <Gallery images={GALLERY_IMAGES} />
-          </div>
-        </Reveal>
+        <h2 className="text-2xl font-medium text-black/90">{t.gallery.title}</h2>
+        <div className="mt-8">
+          <Gallery images={GALLERY_IMAGES} />
+        </div>
       </section>
 
       {/* CONTACT */}
       <section
         id="contact"
         className="mx-auto max-w-5xl px-6 py-24 md:px-8 scroll-mt-32
-                   [content-visibility:auto] [contain-intrinsic-size:1px_640px]"
+                   [content-visibility:auto] [contain-intrinsic-size:1px_620px]"
       >
-        <Reveal>
-          <h2 className="text-2xl font-medium text-black/90">
-            {t.contact.title}
-          </h2>
+        <h2 className="text-2xl font-medium text-black/90">{t.contact.title}</h2>
 
-          {/* sorrend: telefonszám, cím, ikonok */}
-          <div className="mt-6 space-y-2 text-black/70">
-            <p>📞 {t.contact.phone}</p>
-            <p>📍 {t.contact.address}</p>
-          </div>
+        {/* sorrend: telefon, cím, ikonok */}
+        <div className="mt-6 space-y-2 text-black/70">
+          <p>📞 {t.contact.phone}</p>
+          <p>📍 {t.contact.address}</p>
+        </div>
 
-          {/* ikonok: alul középen (csak amik léteznek az Icon.tsx-ben) */}
-          <div className="mt-4 flex justify-center">
-            <div className="flex items-center gap-8 text-black/70">
-              <a
-                href={t.contact.whatsapp}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="WhatsApp"
-                className="opacity-55 hover:opacity-90 transition-opacity"
-              >
-                <Icon name="whatsapp" className="h-5 w-5" />
-              </a>
-
-              <a
-                href={t.contact.instagram}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-                className="opacity-55 hover:opacity-90 transition-opacity"
-              >
-                <Icon name="instagram" className="h-5 w-5" />
-              </a>
-
-              <a
-                href={t.contact.facebook}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Facebook"
-                className="opacity-55 hover:opacity-90 transition-opacity"
-              >
-                <Icon name="facebook" className="h-5 w-5" />
-              </a>
-
-              <a
-                href={t.contact.airbnb}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Airbnb"
-                className="opacity-55 hover:opacity-90 transition-opacity"
-              >
-                <Icon name="airbnb" className="h-5 w-5" />
-              </a>
-
-              {/* Maps: nincs ikon, ezért szöveges link – de ott van */}
-              <a
-                href={t.contact.maps}
-                target="_blank"
-                rel="noreferrer"
-                className="text-xs tracking-wide opacity-60 hover:opacity-95 transition-opacity"
-              >
-                MAPS
-              </a>
-            </div>
-          </div>
-        </Reveal>
+        {/* ikonok: footer fölött, középen, kisebb és halványabb */}
+        <div className="mt-4">
+          <SocialIcons items={socialItems} />
+        </div>
       </section>
     </main>
   );
